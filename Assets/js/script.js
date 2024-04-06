@@ -3,8 +3,18 @@ const apiKey= "017f971b237adb47b2cb9f536e739bd6"
 
 
 //global array to store search history
-var searchHistory = localStorage.getItem('searchHistory') ? JSON.parse(localStorage.getItem('searchHistory')) : [];
-
+// Initialize search history array with data from localStorage or an empty array if it doesn't exist
+var searchHistory = localStorage.getItem('searchHistory');
+if (searchHistory) {
+    searchHistory = JSON.parse(searchHistory);
+} else {
+    searchHistory = [];
+    $(".search-history-button").each(function(index) {
+        if (index < $(".search-history-button").length - 1) {
+            searchHistory.push("Button");
+        }
+    });
+}
 
 
 //=============================================================================
@@ -102,18 +112,40 @@ updateSearchHistory(inputValue)
 
 // function updateSearch history
 function updateSearchHistory(searchTerm){
-  console.log(searchTerm)
+  
 
 
   //check if search history buttons full
   // if not full add the new search term to the next available button
   // if full move existing search history values down by index Then overwrite the top box
 
-  if(searchHistory.length < $("#search-history-button").length){
-//if not full
-    $('#search=history-button').eq(searchHistory.length).text(searchTerm)
+  if(searchHistory.length < $(".search-history-button").length){
+//if not full  since .length always gonna be the next index its easy to do
+$(".search-history-button").eq(searchHistory.length).text(searchTerm)
+// add to local storage
+searchHistory.push(searchTerm)
 
+  }else{
+//if full
+// loop thru reverse order, start from second to last element
+      for(var i = searchHistory.length -1; i>0; i--){
+        // first update/move its index  
+        console.log(i+'before: ' +searchHistory[i])
+        searchHistory[i] = searchHistory[i - 1];
+        console.log(i+'after: ' +searchHistory[i])
+        // second update/move its context
+        $(".search-history-button").eq(i).text(searchHistory[i])
+        
+
+      }
+//overwrite the top button content with the new search
+$(".search-history-button").first().text(searchTerm)
+      // remove the last element from the array
+      searchHistory[0] = searchTerm;
   }
+
+  // Update localstorage wit h the updated search history
+  localStorage.setItem('searchHistory', JSON.stringify(searchHistory))
 
 }
 //=====================================================================
@@ -126,22 +158,18 @@ function updateSearchHistory(searchTerm){
 
 $(document).ready(function(){
 
- // Check if search history exists in localStorage
- if (localStorage.getItem('searchHistory')) {
-  // If it exists, parse the JSON string and assign it to the searchHistory array
-  searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
-  // Update the search history buttons with the loaded search history
-  for (var i = 0; i < searchHistory.length; i++) {
-      $(".search-history-button").eq(i).text(searchHistory[i]);
+    // Update the search history buttons with the loaded search history
+    for (var i = 0; i < searchHistory.length; i++) {
+      $('.search-history-button').eq(i).text(searchHistory[i])
   }
-}
+  
 
 
 })
 
 
 
-$('#search-button').on('click', searchButton);
+$('#search-button').on('click', searchButton)
 
 
 
