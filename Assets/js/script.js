@@ -66,7 +66,7 @@ targetSection.empty()
 //input temp
 // input wind
 //input humidity
-console.log(recievedData)
+
 
 recievedData.list.forEach(function(fiveDayGridData){
 const date = dayjs(fiveDayGridData.dt_txt).format('MM/DD/YYYY')
@@ -94,7 +94,7 @@ const date = dayjs(fiveDayGridData.dt_txt).format('MM/DD/YYYY')
 }
 
 
-//==========================================================================================
+//================================SEARCH==========================================================
 // this function triggers when search button is clicked
 // purpose: get the value out of input box => store it into history and trigger city weather functions
 function searchButton(eventObject){
@@ -103,12 +103,15 @@ function searchButton(eventObject){
 var inputValue = $('#search-input').val()
 console.log(inputValue)
 
+
+getCurrentWeather(inputValue).then(outputCurrentWeather)
+  getDayWeather(inputValue).then(outputDaysWeather)
 // send the value to the UPDATESEARCHHISTORY 
 updateSearchHistory(inputValue)
 
 }
 
-//=========================================================================
+//==============SEARCH HISTORY===========================================================
 
 // function updateSearch history
 function updateSearchHistory(searchTerm){
@@ -120,7 +123,7 @@ function updateSearchHistory(searchTerm){
   // if full move existing search history values down by index Then overwrite the top box
 
   if(searchHistory.length < $(".search-history-button").length){
-//if not full  since .length always gonna be the next index its easy to do
+//if not full  since .length always gonna be the next index, so its easy to do
 $(".search-history-button").eq(searchHistory.length).text(searchTerm)
 // add to local storage
 searchHistory.push(searchTerm)
@@ -129,10 +132,10 @@ searchHistory.push(searchTerm)
 //if full
 // loop thru reverse order, start from second to last element
       for(var i = searchHistory.length -1; i>0; i--){
-        // first update/move its index  
-        console.log(i+'before: ' +searchHistory[i])
+        // first update/move its index  3->2->1 index
+    //    console.log(i+'before: ' +searchHistory[i])  last element lets say is TARIK, the element before that is MEHMET
         searchHistory[i] = searchHistory[i - 1];
-        console.log(i+'after: ' +searchHistory[i])
+      //  console.log(i+'after: ' +searchHistory[i])  now the last element is MEHMET , tarik is gone
         // second update/move its context
         $(".search-history-button").eq(i).text(searchHistory[i])
         
@@ -150,8 +153,14 @@ $(".search-history-button").first().text(searchTerm)
 }
 //=====================================================================
 
+// this function triggers when u click on search history
+function returnCityName(){
+  var cityName = $(this).text()
 
 
+  getCurrentWeather(cityName).then(outputCurrentWeather)
+  getDayWeather(cityName).then(outputDaysWeather)
+}
 
 
 
@@ -168,17 +177,18 @@ $(document).ready(function(){
 })
 
 
-
+//EVENT LISTENERS
 $('#search-button').on('click', searchButton)
 
+$(".search-history-button").on("click", returnCityName)
 
 
 
 
 
 //current weather
-getCurrentWeather('London').then(outputCurrentWeather)
+// getCurrentWeather('London').then(outputCurrentWeather)
 
 // 5 day
-getDayWeather('London').then(outputDaysWeather)
+// getDayWeather('London').then(outputDaysWeather)
 
