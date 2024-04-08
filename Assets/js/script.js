@@ -72,7 +72,7 @@ recievedData.list.forEach(function(fiveDayGridData){
 const date = dayjs(fiveDayGridData.dt_txt).format('MM/DD/YYYY')
 
     //the data has hour values for each day, so i target hour 12 to target next day
-   if(fiveDayGridData.dt_txt.includes('12')){
+   if(fiveDayGridData.dt_txt.includes('12:00')){
     targetSection.append(`
     <div class="bg-gray-800 rounded-lg p-4 text-white">
         <p>${date}</p>
