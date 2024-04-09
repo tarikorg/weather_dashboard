@@ -24,7 +24,8 @@ N/A
 Rutgers Bootcamp resources.
 
 ## Deployment
-Link to my repo - Module 06(https://github.com/tarikorg/weather_dashboard)
+- Link to my repo - Module 06(https://github.com/tarikorg/weather_dashboard)
+- Link to my deployed website - (https://tarikorg.github.io/weather_dashboard/)
 
 ## License
 Please refer to the MIT LICENSE in the repo
